@@ -6,6 +6,7 @@ Created on Mon Mar 27 14:40:33 2023
 """
 
 import numpy as np
+import matplotlib.pyplot as plt
 
 class MCStockSimulator:
     def __init__(self, s, t, mu, sigma, nper_per_year):
@@ -32,3 +33,12 @@ class MCStockSimulator:
         for i in range(1, len(stock_values)):
             stock_values[i] = stock_values[i - 1] * (1 + returns[i - 1])
         return stock_values
+
+    def plot_simulated_stock_values(self, num_trials=1):
+        for i in range(num_trials):
+            simulated_values = self.generate_simulated_stock_values()
+            plt.plot(simulated_values)
+        plt.xlabel('Time (Years)')
+        plt.ylabel('Stock Price')
+        plt.title(f'{num_trials} Simulations of Stock Prices')
+        plt.show()

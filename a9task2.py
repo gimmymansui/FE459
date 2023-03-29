@@ -8,6 +8,7 @@ Created on Tue Mar 28 11:35:09 2023
 import numpy as np
 from scipy.stats import norm
 from MCStockSimulator import MCStockSimulator
+import math
 
 class MCStockOption(MCStockSimulator):
     '''base class for all options'''
@@ -16,6 +17,8 @@ class MCStockOption(MCStockSimulator):
         super().__init__(s, t, r, sigma, nper_per_year, num_trials)
         self.x = x
         self.num_trials = num_trials
+        self.mean = np.mean(trials)
+        self.std = np.std(trials)
 
     def __repr__(self):
         '''gives string representation of option'''
@@ -27,9 +30,9 @@ class MCStockOption(MCStockSimulator):
         return 0
 
     def stderr(self):
-        if self.num_trials == 0:
-            return 0
-        return self.stdev() / np.sqrt(self.num_trials)
+        if 'stdev' in dir(self):
+            return self.stdev / math.sqrt(self.ntrials)
+        return 0
     
 class MCEuroCallOption(MCStockOption):
     '''euro call option'''
