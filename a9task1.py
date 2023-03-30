@@ -24,21 +24,22 @@ class MCStockSimulator:
         dt = 1 / self.nper_per_year
         drift = (self.mu - 0.5 * self.sigma ** 2) * dt
         diffusion = self.sigma * np.sqrt(dt) * np.random.normal(size=n)
-        return np.exp(drift + diffusion) - 1
+        return drift + diffusion
     
     def generate_simulated_stock_values(self):
         returns = self.generate_simulated_stock_returns()
-        stock_values = np.zeros(len(returns) + 1)
-        stock_values[0] = self.s
-        for i in range(1, len(stock_values)):
-            stock_values[i] = stock_values[i - 1] * (1 + returns[i - 1])
-        return stock_values
+        prices = np.zeros(len(returns)+1)
+        prices[0] = self.s
+        for i in range(1, len(prices)):
+            prices[i] = prices[i-1] * np.exp(returns[i-1])
+        return prices
 
     def plot_simulated_stock_values(self, num_trials=1):
         for i in range(num_trials):
             simulated_values = self.generate_simulated_stock_values()
-            plt.plot(simulated_values)
-        plt.xlabel('Time (Years)')
-        plt.ylabel('Stock Price')
-        plt.title(f'{num_trials} Simulations of Stock Prices')
+            time_axis = np.arange(len(simulated_values)) * (self.t / len(simulated_values))
+            plt.plot(time_axis, simulated_values)
+        plt.xlabel('years')
+        plt.ylabel('$ value')
+        plt.title(f'{num_trials} simulated trials')
         plt.show()
