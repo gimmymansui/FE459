@@ -44,6 +44,7 @@ def run_mc_drawdown_trials(init_price, years, r, sigma, trial_size, num_trials):
         MCSim = MCStockSimulator(init_price, years, r, sigma, trial_size)
         prices = MCSim.generate_simulated_stock_values()
         mc_dd = compute_drawdown(prices)
+        #Getting only the dd_pct
         mc_pct = pd.DataFrame(data=mc_dd['dd_pct'])
         #Getting Max drawdown each trial
         ddHigh = mc_pct.max()
